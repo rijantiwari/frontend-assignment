@@ -1,7 +1,7 @@
 import Header from "@/components/Header";
 import "@/styles/globals.css";
 import { Montserrat } from "next/font/google";
-
+import Footer from "@/components/Footer";
 export const metadata = {
   title: "Online Store",
   description: "Created For Front End Assignment",
@@ -22,6 +22,7 @@ export default function RootLayout({
       <body>
         <Header />
         {children}
+        <Footer />
       </body>
     </html>
   );
