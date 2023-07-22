@@ -1,42 +1,40 @@
 "use client";
 import React, { useState, ChangeEvent, FormEvent } from "react";
+import Product from "./Product";
+import Form from "./Form";
+import SearchedResults from "./SearchedResults";
 
-const SearchForm = ({ setSearchResults }) => {
+const SearchForm = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [searchedProducts, setSearchedProducts] = useState([]);
 
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
   };
+  console.log(searchQuery);
 
-  const handleSearchSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSearchSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setSearchResults(searchQuery);
+    try {
+      const response = await fetch(
+        `https://fakestoreapi.com/products?title=${searchQuery}`
+      );
+      const searchResults = await response.json();
+      setSearchedProducts(searchResults);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
-
+  console.log(searchedProducts);
   return (
-    <form className="relative flex-center " onSubmit={handleSearchSubmit}>
-      <input
-        type="text"
-        placeholder="Search for a product"
-        value={searchQuery}
-        onChange={handleSearchChange}
-        required
-        className="search_input peer"
+    <>
+      <Form
+        handleSearchChange={handleSearchChange}
+        handleSearchSubmit={handleSearchSubmit}
+        searchQuery={searchQuery}
       />
-      <button
-        type="submit"
-        className=" ml-7 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
-      >
-        <svg
-          className="fill-current w-4 h-4 mr-2"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-        >
-          <path d="M15.5 14h-.79l-.28-.27C16.41 12.16 17 10.66 17 9c0-3.87-3.13-7-7-7s-7 3.13-7 7 3.13 7 7 7c1.66 0 3.17-.59 4.36-1.57l.27.28v.79l5 4.99L20 19l-4.5-4.5zm-8 0C6.01 14 4 11.99 4 9s2.01-5 3.5-5 3.5 2.01 3.5 5-2.01 5-3.5 5z" />
-        </svg>
-        <span>Search</span>
-      </button>
-    </form>
+      <SearchedResults searchedProducts={searchedProducts} />
+    </>
   );
 };
 

@@ -10,7 +10,7 @@ type Props = {
 
 const ProductListPage: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
-  const [searchResults, setSearchResults] = useState<Product[]>([]);
+  const [searchedProducts, setSearchedProducts] = useState<Product[]>([]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -28,10 +28,8 @@ const ProductListPage: React.FC = () => {
 
   return (
     <main>
-      <SearchForm setSearchResults={setSearchResults} />
-
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {(searchResults.length > 0 ? searchResults : products).map(
+        {(searchedProducts.length > 0 ? searchedProducts : products).map(
           (product) => (
             <Product key={product.id} product={product} />
           )
